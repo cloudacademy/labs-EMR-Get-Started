@@ -1,0 +1,50 @@
+Step 3 Creating an EMR Cluster
+Description - Configure, create and launch an EMR cluster
+Introduction
+Ultimately, an EMR cluster is comprised of EC2 instances. Amazon deploys and manages the instances in a EMR cluster, offloading much of the complexity for you. Depending on the size of the data set you need to process and the time you need to access results, the number and size of the instances will vary. A cluster has three types of nodes:
+	1.	Master - Manages the cluster and all software components needed to distribute both data and tasks to slave nodes. The master also tracks the status of tasks and the overall health of the cluster. A slave node can be a Core or Task node. 
+	2.	Core - A slave node that includes software to run tasks and store data. (Data is stored in a Hadoop Distributed File System (HDFS).)
+	3.	Task - A slave node that includes software to run tasks but does not store data.
+A cluster typically contains a single master node, and several core slave nodes. A cluster can consist of a single Master node however. Optionally, task nodes may be used to help scale the cluster for more processing power. 
+Because the size of the sample data set and the processing power required to process the logs is not immense, this Lab will use a single Master node. It's important to realize that in this Lab Step you will create, configure and launch your EMR cluster. When through, you will have a running cluster that can then be configured to process tasks. Amazon offers many different ways to configure your cluster and their workloads. In this Lab Step you will configure your cluster in Launch mode. In Launch mode a running cluster can then accept and execute tasks you submit. The cluster continues to run until you explicitly terminate it. Many production environments run in Step execution mode. In Step execution mode the cluster starts, runs the "steps" (tasks) and terminates itself. 
+Tip: When at the beginning of your learning curve, setting up your initial configuration using "Cluster" as the launch mode is recommended. The continuous nature of this mode allows you to add a task, run it, and then tinker around debugging and even connecting to the instances if needed. You can then add the task again and repeat debugging efforts if needed!
+Instructions
+> From the Amazon Management Console, navigate to Services > Analytics > EMR. You are placed in the Cluster list section of the EMR console.
+ 
+> Click Create cluster. You are placed in the Create Cluster - Quick Options screen:
+
+Quick Options sets up common default values broken down by the four sections highlighted above: General, Software, Hardware and Security.
+ 
+> Click Go to Advanced Options:
+
+Advanced Options provides greater configuration options broken down into a multi-step wizard with a screen for four similar topics (Software, Hardware, General, Security) that the Quick Options includes.
+ 
+> Take a moment to look over the options on the Software and Steps screen. Don't worry about the details for the moment. When ready to proceed, click Next to see the Hardware configuration options. Click Next and look over all the options for each of the Advanced Options steps. Click Previous several times to return to Step 1: Software and Steps. (Important! Do not create your cluster yet!) This exercise is simply meant to acquaint you with the type of options available when configuring your EMR cluster. It should give you a healthier understanding of the infrastructure and software underneath that Amazon provides and manages in order to make MapReduce simpler for you to use.
+ 
+> Click Go to quick options. For your first EMR cluster, it's best to keep it fairly basic. Fill out the following for each section:
+General Configuration
+	•	Cluster name: Enter CA Cluster
+	•	Logging: Leave checked (default)
+	•	S3 folder: Enter the name of the unique S3 bucket previously created. For example: calabs-emr-# (Where # is a number used to guarantee uniqueness of your S3 bucket name.)
+	•	Launch mode: Cluster (default)
+Software Configuration
+	•	Release: emr-5.6.0 (Many of the latest releases are supported.)
+	•	Applications: Core Hadoop (default. Notice the software and versions that are included with the application package.)
+Hardware Configuration
+	•	Instance type: m1.xlarge (A larger instance type is not needed. Too small of an instance will have memory issues when the instance gets bootstrapped.)
+	•	Number of instances: Change this to 1 (A single master node without any slaves will suffice.)
+	•	Note: If you changed the instance type to a smaller computed optimized instance (c1.medium) the hardware specifications would be too limited for it to be a master node and process the task. The cluster may run but not have enough memory to process any sizable workloads. Determining the ideal instance size for your environment is of course beyond the scope of this lab, a skill that some argue is part science, part art.
+Security and access
+	•	EC2 key pair: Select Proceed without an EC2 key pair (You will not need to SSH into the instance for this lab.)
+	•	Permissions: Default
+Click Create cluster when ready to proceed.
+ 
+> Click Cluster list in the left hand navigation pane. All clusters are listed. Eventually, the cluster you just created should settle into a Status of Waiting - Cluster ready:
+
+If you had created and launched a cluster in Step execution mode, and had issues, it would look similar to the following in your Cluster list:
+
+Although the logs persist in S3 and provide debugging information, all instances in the cluster are terminated, preventing an SSH connection for further debugging options.
+ 
+Summary 
+Congratulations! You learned how to configure, create, launch and monitor basic status transitions for your cluster. You were also exposed to the many different configuration options available to you when setting up your cluster. 
+You have a running Amazon EMR cluster and are ready to give it work to do! 
